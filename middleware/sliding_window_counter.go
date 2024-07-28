@@ -59,8 +59,8 @@ func NewSlidingWindowCounter(
 	}, nil
 }
 
-// Accept implements RateLimiter.
-func (s *SlidingWindowCounter) Accept(key string) (accepted bool) {
+// Take implements RateLimiter.
+func (s *SlidingWindowCounter) Take(key string) (accepted bool) {
 	window := s.getWindow(key)
 
 	now := time.Now()

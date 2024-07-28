@@ -23,7 +23,7 @@ func TestSlidingWindowCounter(t *testing.T) {
 
 	// distributed low request: 1 req per 500 millisecond => should success
 	for range 12 {
-		accepted := sw.Accept(key)
+		accepted := sw.Take(key)
 		if !accepted {
 			t.Error("should be accepted")
 		}
@@ -34,7 +34,7 @@ func TestSlidingWindowCounter(t *testing.T) {
 
 	// burst for short period => should fail in 31th request
 	   for i := range 31 {
-	       accepted := sw.Accept(key)
+	       accepted := sw.Take(key)
 	       if accepted != (i != 30) {
 	           t.Errorf("should not accept on 30, else accept: %d", i)
 	       }
@@ -44,7 +44,7 @@ func TestSlidingWindowCounter(t *testing.T) {
 
 	// distributed high request: 1 req per 70 millisecond => should fail in 31th request
 	for i := range 31 {
-		accepted := sw.Accept(key)
+		accepted := sw.Take(key)
 		if accepted != (i != 30) {
 			t.Errorf("should not accept on 30, else accept: %d", i)
 		}
@@ -55,7 +55,7 @@ func TestSlidingWindowCounter(t *testing.T) {
 	time.Sleep(6 * time.Second)
     for i := range 40 {
         key := strconv.Itoa(i % 2)
-		accepted := sw.Accept(key)
+		accepted := sw.Take(key)
 		if !accepted {
 		    t.Errorf("should accepted")
         }
